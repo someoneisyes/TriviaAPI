@@ -205,6 +205,28 @@ def create_app(test_config=None):
   category to be shown. 
   '''
 
+  @app.route('/quizzes', methods=['POST'])
+  def get_question_for_quiz():
+    res = request.json
+    previous_questions = res['previous_questions']
+    quiz_category = res['quiz_category']
+
+    if quiz_category['id'] != 0:
+      questions = Question.query.filter(Question.id.notin_(previous_questions)).filter_by(category=quiz_category['id']).all()
+      formatted_questions = [question.format() for question in questions]
+    else:
+      questions = Question.query.filter(Question.id.notin_(previous_questions)).all()
+      formatted_questions = [question.format() for question in questions]
+    
+    if len(formatted_questions) != 0:
+      question = random.choice(formatted_questions)
+    
+    else:
+      question = None
+
+    return jsonify ({
+      'question': question
+    })
 
   '''
   @TODO: 

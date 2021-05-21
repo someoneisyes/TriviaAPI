@@ -70,7 +70,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(question, None)  """ 
 
     def test_422_if_question_does_not_exist(self):
-        res = self.client().delete('/questions/1000')
+        res = self.client().delete('/questions/9000')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 422)
