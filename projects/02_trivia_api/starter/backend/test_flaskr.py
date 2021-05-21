@@ -31,6 +31,16 @@ class TriviaTestCase(unittest.TestCase):
             "difficulty": 4, 
             "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
         }
+
+        self.quiz = {
+	        "previous_questions": {
+                
+            }, 
+	        "quiz_category": {
+                "type": "History",
+                "id": 4
+                }
+}
     
     def tearDown(self):
         """Executed after reach test"""
@@ -92,6 +102,14 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 405)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'method not allowed')
+
+    def test_get_question_for_quiz(self):
+        res = self.client().post('/quizzes', json=self.quiz)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['question'])
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
